@@ -2,12 +2,13 @@ from django.shortcuts import render
 from .forms import CustomPasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
-from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
 
-# Create your views here.
+@login_required(login_url='common:login')
 def index(request):
     return render(request, 'mypage/mypage.html')
 
+@login_required(login_url='common:login')
 def password_edit_view(request):
     if request.method == 'POST':
         password_change_form = CustomPasswordChangeForm(request.user, request.POST)

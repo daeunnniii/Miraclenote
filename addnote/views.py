@@ -11,12 +11,15 @@ import json
 import base64
 
 from datetime import datetime
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
+@login_required(login_url='common:login')
 def index(request):
     return render(request, 'addnote/making_note.html')
 
+@login_required(login_url='common:login')
 def saveNote(request):
     user_input_str = request.POST['file_route']
     note = Note()
@@ -67,6 +70,7 @@ def saveNote(request):
 
     n = Note.objects.get(id=note.id)
     n.sttText = strResult
+    n.user = request.user
     n.save()
     
     return redirect('/mynote/')   
