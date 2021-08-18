@@ -99,8 +99,6 @@ def view_network(request, note_id):
         note.save()
     else:
         nodes_request, edges_request = note.vis_js_nodes, note.vis_js_edges
-        print('nodes: '+nodes_request)
-        print('edges: '+edges_request)
     context = {'result': 'success', 'nodes':nodes_request, 'edges':edges_request}
     return JsonResponse(context)
 

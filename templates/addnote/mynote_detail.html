@@ -70,16 +70,18 @@
                 if ( response['result'] == "success") {
                     let nodes_receive = response['nodes'];
                     let edges_receive = response['edges'];
-                    var nodes = new vis.DataSet(nodes_receive);
-                    var edges = new vis.DataSet(edges_receive);
+                    alert(nodes_receive);
+                    alert(edges_receive);
+                    let nodes = new vis.DataSet(nodes_receive);
+                    let edges = new vis.DataSet(edges_receive);
                     // create a network
-                    var container = document.getElementById('mynetwork');
+                    let container = document.getElementById('mynetwork');
                     // provide the data in the vis format
-                    var data = {
+                    let data = {
                         nodes: nodes,
                         edges: edges
                     };
-                    var options = {
+                    let options = {
                         nodes: {borderWidth: 2, scaling:{ label:{enabled:true, min:20, max:50} }},
                         interaction: {hover: true, navigationButtons: true, keyboard: true},
                         groups: {
@@ -196,14 +198,14 @@
                             }
                         }
                     };
-                    var network = new vis.Network(container, data, options);
+                    let network = new vis.Network(container, data, options);
                     network.setOptions(options);
                 }
             }
         })
     }
 </script>
-<div class="container" id="article">
+<div id="article">
     <form method="post" class="post-form my-3" action="{% url 'addnote:addnote_save' note.id %}">
         {% csrf_token %}
         <!-- 오류표시 Start -->
