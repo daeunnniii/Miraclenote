@@ -1,8 +1,13 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from .models import Note
+from django.shortcuts import get_object_or_404, render, redirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import timezone
-
+from django.contrib.auth.decorators import login_required
+from .models import Note
+from .forms import NoteEditForm
+from addnote.models import Note
+from addnote import textrank_word2vec
+from django.http import JsonResponse
+from django.urls import reverse
 import librosa
 import soundfile as sf
 
@@ -23,10 +28,11 @@ def index(request):
 def saveNote(request):
     user_input_str = request.POST['file_route']
     note = Note()
+    note.user = request.user
     note.subject = request.POST['subject']
     note.note_description = request.POST['note_description']
-    note.audio = request.FILES['audio']
     note.reg_date=timezone.now()
+    note.audio = request.FILES['audio']
     note.save()
 
     openApiURL = "http://aiopen.etri.re.kr:8000/WiseASR/Recognition"
@@ -64,13 +70,53 @@ def saveNote(request):
             headers={"Content-Type": "application/json; charset=UTF-8"},
             body=json.dumps(requestJson)
         )
-        
-        jsonObject = json.loads(str(response.data,"utf-8"))
-        strResult = strResult + str(jsonObject.get("return_object").get("recognized"))
-
+        try:
+            jsonObject = json.loads(str(response.data,"utf-8"))
+            strResult = strResult + str(jsonObject.get("return_object").get("recognized"))
+        except:
+            pass
     n = Note.objects.get(id=note.id)
     n.sttText = strResult
-    n.user = request.user
     n.save()
     
-    return redirect('/mynote/')   
+    return redirect(n.id)
+
+@login_required(login_url='common:login')
+def result(request, note_id):
+    note = get_object_or_404(Note, pk=note_id)
+    form = NoteEditForm(instance=note)
+    context = {'note' : note, 'form' : form}
+    return render(request, 'addnote/mynote_detail.html', context)
+
+@login_required(login_url='common:login')
+def view_network(request, note_id):
+    note = get_object_or_404(Note, pk=note_id)
+    text = note.sttText
+    print('nodes: '+note.vis_js_nodes)
+    print('edges: '+note.vis_js_edges)
+    if (note.vis_js_nodes == '' or note.vis_js_nodes is None) and (note.vis_js_edges == '' or note.vis_js_edges is None):
+        nodes_request, edges_request = textrank_word2vec.textrank_w2v_to_vis(text)
+        note.vis_js_nodes = nodes_request
+        note.vis_js_edges = edges_request
+        note.save()
+    else:
+        print('nodes: '+note.vis_js_nodes)
+        print('edges: '+note.vis_js_edges)
+        nodes_request, edges_request = note.vis_js_nodes, note.vis_js_edges
+    context = {'result': 'success', 'nodes':nodes_request, 'edges':edges_request}
+    return JsonResponse(context)
+
+@login_required(login_url='common:login')
+def addnote_save(request, note_id):
+    note = get_object_or_404(Note, pk=note_id)
+    if request.method == "POST":
+        form = NoteEditForm(request.POST, instance=note)
+        if form.is_valid():
+            note = form.save(commit=False)
+            note.vis_js_nodes, note.vis_js_edges = textrank_word2vec.textrank_w2v_to_vis(note.sttText)
+            note.save()
+            return redirect('mynote:index')
+    else:
+        form = NoteEditForm(instance=note)
+        context = {'note' : note, 'form' : form}
+    return HttpResponseRedirect(reverse('addnote:result'), args=note.id)

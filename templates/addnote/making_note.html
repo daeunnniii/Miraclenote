@@ -1,5 +1,4 @@
 {% load static %}
-<!--노트 생성하는 화면(page5)-->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -8,8 +7,7 @@
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
 
-
-    <title>page5_Miraclenote</title>
+    <title>MiracleNote</title>
 </head>
 <body id="body-pd">
 {% include "navbar.html" %}
@@ -18,6 +16,7 @@
     <h4>여러분만의 특별한 노트를 만들어보세요</h4><br/>
     <form method = "POST" action = "{% url 'addnote:savenote' %}" enctype="multipart/form-data">
         {% csrf_token%}
+        {% include "form_errors.html" %}
         노트명 : <input type = "text" id = "subject" name = "subject" size = "12" ><br/><br/>
         노트 설명 : <textarea name = "note_description" id = "note_description" rows = "7" cols = "40" wrap = "virtual" placeholder="원하는 내용을 입력해 주세요"></textarea><br/>
         파일첨부 : <input type = "file" id = "audio" name = "audio" size = "12" onchange="setThumbnail(event);"><br/>
