@@ -6,6 +6,6 @@ from addnote.models import Note
 
 @login_required(login_url='common:login')
 def index(request):
-    note_list = Note.objects.order_by('-reg_date')
+    note_list = Note.objects.select_related('user').filter(user_id=request.user.id).order_by('-reg_date')
     context = {'note_list':note_list}
     return render(request, 'mynote/fullnote.html', context)
