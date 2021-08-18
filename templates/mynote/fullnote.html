@@ -60,7 +60,6 @@
                                 <script type="text/javascript">
                                     nodes_receive = JSON.parse("{{ note.vis_js_nodes }}".replace(/&#x27;/g, "\""));
                                     edges_receive = JSON.parse("{{ note.vis_js_edges }}".replace(/&#x27;/g, "\""));
-                                    alert(nodes_receive)
                                     var nodes = new vis.DataSet(nodes_receive);
                                     var edges = new vis.DataSet(edges_receive);
                                     // create a network
