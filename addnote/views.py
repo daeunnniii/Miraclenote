@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from .models import Note
 from .forms import NoteEditForm
-from addnote.models import Note
+from .models import Note
 from addnote import textrank_word2vec
 from django.http import JsonResponse
 from django.urls import reverse
