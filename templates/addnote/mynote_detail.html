@@ -49,7 +49,7 @@
     </style>
 </head>
 
-<body>
+<body id="body-pd">
 {% include "navbar.html" %}
 <div id="header">
     <h2> MY NOTE</h2>
@@ -70,18 +70,16 @@
                 if ( response['result'] == "success") {
                     let nodes_receive = response['nodes'];
                     let edges_receive = response['edges'];
-                    alert(nodes_receive);
-                    alert(edges_receive);
-                    let nodes = new vis.DataSet(nodes_receive);
-                    let edges = new vis.DataSet(edges_receive);
+                    var nodes = new vis.DataSet(nodes_receive);
+                    var edges = new vis.DataSet(edges_receive);
                     // create a network
-                    let container = document.getElementById('mynetwork');
+                    var container = document.getElementById('mynetwork');
                     // provide the data in the vis format
-                    let data = {
+                    var data = {
                         nodes: nodes,
                         edges: edges
                     };
-                    let options = {
+                    var options = {
                         nodes: {borderWidth: 2, scaling:{ label:{enabled:true, min:20, max:50} }},
                         interaction: {hover: true, navigationButtons: true, keyboard: true},
                         groups: {
@@ -198,7 +196,7 @@
                             }
                         }
                     };
-                    let network = new vis.Network(container, data, options);
+                    var network = new vis.Network(container, data, options);
                     network.setOptions(options);
                 }
             }

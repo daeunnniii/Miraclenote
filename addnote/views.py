@@ -10,7 +10,7 @@ from django.http import JsonResponse
 from django.urls import reverse
 import librosa
 import soundfile as sf
-
+import ast
 import urllib3
 import json
 import base64
@@ -79,7 +79,7 @@ def saveNote(request):
     n.sttText = strResult
     n.save()
     
-    return redirect(n.id)
+    return redirect(str(n.id))
 
 @login_required(login_url='common:login')
 def result(request, note_id):
@@ -98,7 +98,7 @@ def view_network(request, note_id):
         note.vis_js_edges = edges_request
         note.save()
     else:
-        nodes_request, edges_request = note.vis_js_nodes, note.vis_js_edges
+        nodes_request, edges_request = ast.literal_eval(note.vis_js_nodes), ast.literal_eval(note.vis_js_edges)
     context = {'result': 'success', 'nodes':nodes_request, 'edges':edges_request}
     return JsonResponse(context)
 
