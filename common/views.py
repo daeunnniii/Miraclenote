@@ -3,7 +3,11 @@ from django.shortcuts import render, redirect
 from common.forms import UserForm
 
 def index(request):
-    return render(request, 'common/home.html')
+    cur_user = request.user
+    if cur_user.is_authenticated:
+        return redirect('mynote:index')
+    else:
+        return render(request, 'common/home.html')
 
 def signup(request):
     if request.method == "POST":
