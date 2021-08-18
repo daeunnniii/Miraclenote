@@ -91,18 +91,16 @@ def result(request, note_id):
 @login_required(login_url='common:login')
 def view_network(request, note_id):
     note = get_object_or_404(Note, pk=note_id)
-    text = note.sttText
-    print('nodes: '+note.vis_js_nodes)
-    print('edges: '+note.vis_js_edges)
     if (note.vis_js_nodes == '' or note.vis_js_nodes is None) and (note.vis_js_edges == '' or note.vis_js_edges is None):
+        text = note.sttText
         nodes_request, edges_request = textrank_word2vec.textrank_w2v_to_vis(text)
         note.vis_js_nodes = nodes_request
         note.vis_js_edges = edges_request
         note.save()
     else:
-        print('nodes: '+note.vis_js_nodes)
-        print('edges: '+note.vis_js_edges)
         nodes_request, edges_request = note.vis_js_nodes, note.vis_js_edges
+        print('nodes: '+nodes_request)
+        print('edges: '+edges_request)
     context = {'result': 'success', 'nodes':nodes_request, 'edges':edges_request}
     return JsonResponse(context)
 
