@@ -43,24 +43,8 @@
     <div class="bg-light">
         <div class="container"><br>
             <h4>마이페이지</h4>
-            <nav class="navbar-expand-lg navbar-dark bg-light">
-                <div class="collapse navbar-collapse" id="navbarText">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="mypage.html" style="color:black; font-weight: bold;">내 이용 정보</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="mynote.html" style="color:rgb(131, 128, 128);">내가 만든 노트</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav><hr>
+            <hr>
 
-            <div class="media text-muted pt-3">
-                <svg class="bd-placeholder-img mr-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32"><title>Placeholder</title><rect width="100%" height="100%" fill="#007bff"/><text x="50%" y="50%" fill="#007bff" dy=".3em">32x32</text></svg>
-                <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                    <strong class="d-block text-gray-dark">당신의 남은 이용시간은</strong> <남은 시간으로 할지 횟수로 할지> 
-            </div>
             <div style="margin-top:16px">
                 <div class="col-12">
                     <div>
@@ -143,8 +127,7 @@
                                             최소 8개의 숫자와 문자 또는 특수기호를 입력해주세요.
                                         </small>
                                     <div style="text-align: center; margin-bottom:-25px;">
-                                        <p style="color:gray; margin-bottom: 4px;"><i class="fas fa-exclamation-triangle"></i>&nbsp;{{ user.user_id }} 계정의 비밀번호를 변경합니다.</p>
-                                        <a onclick="location.href='/users/profile/'" class="btn btn-sm" id="back_btn"><i class="fa fa-reply"></i>&nbsp;돌아가기</a>
+                                        <p style="color:gray; margin-bottom: 4px;"><i class="fas fa-exclamation-triangle"></i>&nbsp;{{ request.user }} 계정의 비밀번호를 변경합니다.</p>
                                         <button type="submit" class="btn btn-sm" id="detail_btn"><i class="fas fa-check"></i>&nbsp;변경하기</button>
                                     </div>
                                 </form>
