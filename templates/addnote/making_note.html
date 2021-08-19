@@ -6,24 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <script src="https://code.jquery.com/jquery-1.8.0.js" integrity="sha256-00Fh8tkPAe+EmVaHFpD+HovxWk7b97qwqVi7nLvjdgs=" crossorigin="anonymous"></script>
 
     <title>MiracleNote</title>
     <style>
-      #all {
-        width: 90%;
-        height: 800px;
-        background: #333;
-        position:absolute;
-        display: none;
-        text-align: center;
-        opacity: 78%;
-      }
+        #all {
+            width: 90%;
+            height: 800px;
+            position:absolute;
+            display: none;
+            text-align: center;
+            opacity: 78%;
+        }
 
     </style>
 </head>
 <body id="body-pd">
 {% include "navbar.html" %}
 <!-- 내용 입력폼 -->
+<div id="all">
+    <img id="loading" src="{% static 'spinner.gif' %}" style="width:100px; height:100px;margin-top:300px"/>
+</div>
 <div class="container"><br>
     <h4>여러분만의 특별한 노트를 만들어보세요</h4><br/>
     <form method = "POST" action = "{% url 'addnote:savenote' %}" id="frm" enctype="multipart/form-data">
@@ -50,6 +53,11 @@
     function setThumbnail(event) {
         document.getElementById('file_route').value=document.getElementById('audio').files[0].name;
     }
-</script> 
+    function doFunction(){
+        document.getElementById("all").style.display = "block";
+        document.getElementById("frm").submit();
+    }
+</script>
+
 </body>
 </html>
