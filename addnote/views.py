@@ -78,8 +78,9 @@ def saveNote(request):
     n = Note.objects.get(id=note.id)
     n.sttText = strResult
     n.save()
+    note_id = n.id
     
-    return redirect(str(n.id))
+    return redirect('addnote:result', note_id=note_id)
 
 @login_required(login_url='common:login')
 def result(request, note_id):
