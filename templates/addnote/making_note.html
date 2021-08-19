@@ -46,6 +46,11 @@
 <!-- JS -->
 <script src="{% static 'js/main.js' %}"></script>
 <script> 
+    window.onload = function(){
+        var nav = document.getElementById( 'nav_addnote' );
+        nav.classList.add('active'); 
+    }
+
     function setThumbnail(event) {
         document.getElementById('file_route').value=document.getElementById('audio').files[0].name;
     }        

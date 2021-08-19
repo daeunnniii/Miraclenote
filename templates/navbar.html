@@ -6,7 +6,7 @@
                 <h5> <a href="{% url 'common:home' %}" class="nav__logo">Miraclenote</a></h5>
             </div>
             <div class="nav__list">
-                <a href="{% url 'mynote:index' %}" class="nav__link active">
+                <a href="{% url 'mynote:index' %}" id = "nav_index" class="nav__link">
                     <ion-icon name="home-outline" class="nav__icon"></ion-icon>
                     <span class="nav_name">Dashboard</span>
                 </a>
@@ -17,12 +17,12 @@
                     <span class="nav_name">Mynotes</span>
                 </div>-->
 
-                <a href="{% url 'addnote:index' %}" class="nav__link">
+                <a href="{% url 'addnote:index' %}" id = "nav_addnote" class="nav__link">
                     <ion-icon name="pie-chart-outline" class="nav__icon"></ion-icon>
                     <span class="nav_name">Analytics</span>
                 </a>
 
-                <a href="{% url 'mypage:password_edit' %}" class="nav__link">
+                <a href="{% url 'mypage:password_edit' %}" id = "nav_mypage" class="nav__link">
                     <ion-icon name="settings-outline" class="nav__icon"></ion-icon>
                     <span class="nav_name">Settings</span>
                 </a>
