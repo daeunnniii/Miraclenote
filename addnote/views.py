@@ -2,9 +2,13 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
+from django.utils.dateformat import DateFormat
+
 from .models import Note
+from .models import NoteCnt
 from .forms import NoteEditForm
-from .models import Note
+
 from addnote import textrank_word2vec
 from django.http import JsonResponse
 from django.urls import reverse
@@ -79,6 +83,20 @@ def saveNote(request):
     n.sttText = strResult
     n.save()
     note_id = n.id
+    
+    today = DateFormat(datetime.now()).format('Ymd')    
+    noteCnt = NoteCnt.objects.filter(input_date=today)
+    print(noteCnt)
+    
+    if noteCnt :
+        cnt = NoteCnt.objects.get(input_date = today)
+        cnt.save_cnt = cnt.save_cnt+1
+        cnt.save()
+    else :
+        cnt = NoteCnt()
+        cnt.input_date = today
+        cnt.save_cnt = 1
+        cnt.save()
     
     return redirect('addnote:result', note_id=note_id)
 

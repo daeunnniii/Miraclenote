@@ -10,3 +10,8 @@ class Note(models.Model):
     audio = models.ImageField(upload_to="audio")
     vis_js_nodes = models.TextField()
     vis_js_edges = models.TextField()
+
+class NoteCnt(models.Model):
+    save_cnt = models.IntegerField(default=0)
+    input_date = models.IntegerField(default=0)
+

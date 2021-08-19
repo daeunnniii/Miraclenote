@@ -42,6 +42,14 @@
     <meta name="msapplication-config" content="/docs/4.4/assets/img/favicons/browserconfig.xml">
     <meta name="theme-color" content="#563d7c">
     <script> var note_class = 0</script>
+    <style>
+        /* UI Object 가로 */
+        .h_graph ul{margin:0 50px 0 50px;padding:1px 0 0 0;border-top:0;border-right:0;font-size:11px;font-family:Tahoma, Geneva, sans-serif;list-style:none}
+        .h_graph li{position:relative;margin:10px 0;vertical-align:top;white-space:nowrap}
+        .h_graph .g_term{position:absolute;top:0;left:-160px;width:40px;font-size:12pt;line-height:20px;text-align:right}
+        .h_graph .g_bar{display:inline-block;position:relative;height:20px;border-left:0;background:#e9e9e9}
+        .h_graph .g_bar span{position:absolute;top:0;right:-50px;width:40px;font-size:12pt;line-height:20px}
+    </style>
 </head>
 <body id="body-pd">
 {% include "navbar.html" %}
@@ -49,7 +57,23 @@
 <main role="main">
     <div class="bg-light">
         <div class="container"><br>
-            <h4>{{ user }}님의 노트</h4>
+            <div style="height:28px;margin-bottom:30px">
+                <div style="float: left;">
+                    <h4>{{ user }}님의 노트</h4>
+                </div>
+                <div class="h_graph" style="float:right;width:30%;margin-right:6%">
+                    <ul>
+                        <li>
+                            <span class="g_term">음성인식 API 사용량</span>
+                            <span class="g_bar" style="background-color:green; position: absolute; z-index:100; width:{{noteCntPer}}%">
+                            </span>
+                            <span class="g_bar" style="width:100%">
+                                <span>{{noteCntPer}}% ({{noteCnt}}/1000)</span>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <hr>
             <div class="album container row">
                 {% if note_list %}
