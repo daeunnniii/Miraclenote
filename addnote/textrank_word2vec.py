@@ -340,7 +340,7 @@ def textrank_w2v_to_vis(texts):
     for i in range(n):
         if keyword_list[i] not in vocab:
             center = i*15
-            dic1 = {"id": center, "label": keyword_list[i][:keyword_list[i].index('/')], "group": keyword_list[i][keyword_list[i].index('/')+1:]}
+            dic1 = {"id": center, "label": keyword_list[i][:keyword_list[i].index('/')], "group": keyword_list[i][keyword_list[i].index('/')+1:], "value": 1 }
             nodes.append(dic1)
             vocab.append(keyword_list[i])
         else:
@@ -351,7 +351,7 @@ def textrank_w2v_to_vis(texts):
             continue
         for j in range(14):
             if result[j][0] not in vocab:
-                dic1 = {"id": i*15+j+1, "label": result[j][0], "group": komoran.pos(result[j][0])[0][1]}
+                dic1 = {"id": i*15+j+1, "label": result[j][0], "group": komoran.pos(result[j][0])[0][1], "value":result[j][1]}
                 nodes.append(dic1)
                 vocab.append(result[j][0])
                 dic2 = {"from":center, "to":i*15+j+1}

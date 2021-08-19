@@ -230,7 +230,7 @@
             <textarea class="form-control" name="note_description" id="note_description" rows="10">{{ note.note_description }}</textarea>
         </div>
         <button type="submit" class="btn btn-sm btn-outline-secondary">노트 수정</button>
-        <a href="#" class="delete btn btn-sm btn-outline-secondary" data-uri="{% url 'addnote:delete' note.id %}">노트 삭제</a>
+        <a href="#" id="delete" class="btn btn-sm btn-outline-secondary" data-uri="{% url 'addnote:delete' note.id %}">노트 삭제</a>
     </form>
 </div>
 <!-- IONICONS -->
@@ -239,7 +239,7 @@
 <script src="{% static 'js/main.js' %}"></script>
 <script type='text/javascript'>
     $(document).ready(function(){
-        $(".delete").on('click', function() {
+        $("#delete").on('click', function() {
             if(confirm("정말로 삭제하시겠습니까?")) {
                 location.href = $(this).data('uri');
             }
