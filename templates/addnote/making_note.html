@@ -22,9 +22,6 @@
     </style>
 </head>
 <body id="body-pd">
-<div id="all">
-    <img id="loading" src="{% static 'Hourglass.gif' %}" style="width:250px; height:250px;margin-top:350px"/>
-</div>
 {% include "navbar.html" %}
 <!-- 내용 입력폼 -->
 <div class="container"><br>
@@ -50,15 +47,8 @@
         var nav = document.getElementById( 'nav_addnote' );
         nav.classList.add('active'); 
     }
-
     function setThumbnail(event) {
         document.getElementById('file_route').value=document.getElementById('audio').files[0].name;
-    }        
-    function doFunction(){
-        document.getElementById("all").style.display = "block";
-        document.getElementById("frm").submit();
-        
-        //document.getElementById("loading").style.display = "block";
     }
 </script> 
 </body>

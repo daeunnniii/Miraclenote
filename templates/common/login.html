@@ -28,8 +28,8 @@
             <div class="form-group">
                 <input class="txtb" type="password" name="password" placeholder="Password" value="{{ form.password.value|default_if_none:'' }}" style="margin:0 auto">
             </div>
-            <button type="submit" class="login-btn">Login</button>
-            <h5><a href="{% url 'common:signup' %}">회원가입 하기</a></h5>
+            <button type="submit" class="login-btn">로그인</button>
+            <br /><br><button type="button" class="login-btn" onclick="location.href='{% url 'common:signup' %}'">회원가입</button>
         </form>
     </div>
 </div>
