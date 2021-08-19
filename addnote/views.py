@@ -116,3 +116,9 @@ def addnote_save(request, note_id):
         form = NoteEditForm(instance=note)
         context = {'note' : note, 'form' : form}
     return HttpResponseRedirect(reverse('addnote:result'), args=note.id)
+
+@login_required(login_url='common:login')
+def delete_note(request, note_id):
+    note = get_object_or_404(Note, pk=note_id)
+    note.delete()
+    return redirect('mynote:index')
