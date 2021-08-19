@@ -10,11 +10,18 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
     <title>MiracleNote</title>
 
     <style>
+        .row {
+            display: flex; /* 하위 요소(child)의 높이를 동일하게 조정 */
+        }
+
+        .col {
+            flex: 1; /* 이 코드를 가하면 폭도 동일하게 조정됩니다 */
+        }
         #header {
             background-color:lightgray;
             height:100px;
@@ -52,10 +59,12 @@
 <body id="body-pd">
 {% include "navbar.html" %}
 <div id="header">
-    <h2> MY NOTE</h2>
+    <h1 style="font-weight: bolder"> MY NOTE</h1>
 </div>
-
-<div id="mynetwork"></div>
+<div class="row">
+<div class="col" style="margin-top: 60px">
+    <div id="mynetwork"></div>
+</div>
 <script type="text/javascript">
     $(document).ready(function () {
         network_show();
@@ -203,7 +212,7 @@
         })
     }
 </script>
-<div id="article">
+<div class="col">
     <form method="post" class="post-form my-3" action="{% url 'addnote:addnote_save' note.id %}">
         {% csrf_token %}
         <!-- 오류표시 Start -->
@@ -217,21 +226,24 @@
                 {% endfor %}
             </div>
         {% endif %}
-        <div class="form-group1">
-            <h3><label for="subject">제목</label></h3>
+        <div style="float: right; padding-right: 10px; padding-bottom: 30px">
+        <button type="submit" class="btn btn-outline-secondary">노트 수정</button>
+        <a href="#" id="delete" class="btn btn-outline-danger" data-uri="{% url 'addnote:delete' note.id %}">노트 삭제</a>
+        </div><br/>
+        <div class="form-group1" style="padding-bottom: 30px">
+            <h3><label for="subject" style="font-weight: bolder">제목</label></h3>
             <input type="text" class="form-control" name="subject" id="subject" value="{{ note.subject }}">
         </div>
-        <div class="form-group2">
-            <h3><label for="sttText">음성인식 결과</label></h3>
+        <div class="form-group2" style="padding-bottom: 30px">
+            <h3><label for="sttText" style="font-weight: bolder">음성인식 결과</label></h3>
             <textarea class="form-control" name="sttText" id="sttText" rows="10">{{ note.sttText }}</textarea>
         </div>
         <div class="form-group3">
-            <h3><label for="note_description">메모</label></h3>
-            <textarea class="form-control" name="note_description" id="note_description" rows="10">{{ note.note_description }}</textarea>
-        </div>
-        <button type="submit" class="btn btn-sm btn-outline-secondary">노트 수정</button>
-        <a href="#" id="delete" class="btn btn-sm btn-outline-secondary" data-uri="{% url 'addnote:delete' note.id %}">노트 삭제</a>
+            <h3><label for="note_description" style="font-weight: bolder">메모</label></h3>
+            <textarea class="form-control" name="note_description" id="note_description" rows="9">{{ note.note_description }}</textarea>
+        </div><br/>
     </form>
+</div>
 </div>
 <!-- IONICONS -->
 <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
