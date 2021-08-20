@@ -13,6 +13,16 @@ def index(request):
     user = request.user
     
     today = DateFormat(datetime.now()).format('Ymd')
+    noteCntChk = NoteCnt.objects.filter(input_date=today)
+    
+    if noteCntChk :
+        print("test")
+    else :
+        cnt = NoteCnt()
+        cnt.input_date = today
+        cnt.save_cnt = 0
+        cnt.save()
+
     noteCnt = NoteCnt.objects.get(input_date = today)
     noteCntPer = noteCnt.save_cnt/1000*100
     print(noteCntPer)
