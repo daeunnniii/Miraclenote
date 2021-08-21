@@ -58,6 +58,9 @@
     <div class="bg-light">
         <div class="container"><br>
             <div style="height:28px;margin-bottom:30px">
+                {% for message in messages %}
+                    {% include "messageShow.html" %}
+                {% endfor %}
                 <div style="float: left;">
                     <h4>{{ user }}님의 노트</h4>
                 </div>
