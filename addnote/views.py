@@ -8,6 +8,7 @@ from django.http import Http404
 from .models import Note
 from .models import NoteCnt
 from .forms import NoteEditForm
+from django.contrib import messages
 
 from addnote import textrank_word2vec
 from django.http import JsonResponse
@@ -30,6 +31,15 @@ def index(request):
 
 @login_required(login_url='common:login')
 def saveNote(request):
+    today = DateFormat(datetime.now()).format('Ymd')    
+    noteCnt = NoteCnt.objects.filter(input_date=today)
+    
+    if noteCnt:
+        totalCnt = NoteCnt.objects.get(input_date = today).save_cnt
+        if totalCnt < 1000 :
+            messages.error(request, "일일 API 사용량이 초과하여 노트 등록이 불가능합니다.")
+            return redirect('mynote:index')
+    
     user_input_str = request.POST['file_route']
     note = Note()
     note.user = request.user
@@ -63,9 +73,6 @@ def saveNote(request):
     n.sttText = strResult
     n.save()
     note_id = n.id
-    
-    today = DateFormat(datetime.now()).format('Ymd')    
-    noteCnt = NoteCnt.objects.filter(input_date=today)
     
     if noteCnt :
         cnt = NoteCnt.objects.get(input_date = today)
