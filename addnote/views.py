@@ -39,46 +39,26 @@ def saveNote(request):
     note.audio = request.FILES['audio']
     note.save()
 
-    openApiURL = "http://aiopen.etri.re.kr:8000/WiseASR/Recognition"
-    accessKey = "b1a210f3-f6fd-4fab-8819-0e47149b2a92"
-    languageCode = "korean"
-    
+    apiCallCnt = 0
     sr = 16000
-    sec = 30
     y, sr = librosa.load('./media/audio/'+user_input_str, sr=sr)
-    test = round(len(y)/sr)
+    audioLen = round(len(y)/sr)
     strResult = ""
-    
-    for i in range(0, test, 10):
-        file_name = str(datetime.now().microsecond)
-        ny = y[sr*i:sr*(i+10)]
-        sf.write('./media/result/'+file_name+'.wav', ny, sr, format='WAV', endian='LITTLE', subtype='PCM_16') # 깨지지 않음
 
-        audioFilePath = './media/result/'+file_name+'.wav'
-        file = open(audioFilePath, "rb")
-        audioContents = base64.b64encode(file.read()).decode("utf8")
-        file.close()
+    if audioLen < 60:
+        audioFilePath = './media/audio/'+user_input_str
+        strResult = strResult + callEtriApi(audioFilePath)
+        apiCallCnt = apiCallCnt + 1
+    else:
+        for i in range(0, audioLen, 10):
+            file_name = str(datetime.now().microsecond)
+            ny = y[sr*i:sr*(i+10)]
+            sf.write('./media/result/'+file_name+'.wav', ny, sr, format='WAV', endian='LITTLE', subtype='PCM_16') # 깨지지 않음
 
-        requestJson = {
-            "access_key": accessKey,
-            "argument": {
-                "language_code": languageCode,
-                "audio": audioContents
-            }
-        }
-
-        http = urllib3.PoolManager()
-        response = http.request(
-            "POST",
-            openApiURL,
-            headers={"Content-Type": "application/json; charset=UTF-8"},
-            body=json.dumps(requestJson)
-        )
-        try:
-            jsonObject = json.loads(str(response.data,"utf-8"))
-            strResult = strResult + str(jsonObject.get("return_object").get("recognized"))
-        except:
-            pass
+            audioFilePath = './media/result/'+file_name+'.wav'
+            strResult = strResult + callEtriApi(audioFilePath)
+            apiCallCnt = apiCallCnt + 1
+            
     n = Note.objects.get(id=note.id)
     n.sttText = strResult
     n.save()
@@ -86,16 +66,15 @@ def saveNote(request):
     
     today = DateFormat(datetime.now()).format('Ymd')    
     noteCnt = NoteCnt.objects.filter(input_date=today)
-    print(noteCnt)
     
     if noteCnt :
         cnt = NoteCnt.objects.get(input_date = today)
-        cnt.save_cnt = cnt.save_cnt+1
+        cnt.save_cnt = cnt.save_cnt+apiCallCnt
         cnt.save()
     else :
         cnt = NoteCnt()
         cnt.input_date = today
-        cnt.save_cnt = 1
+        cnt.save_cnt = apiCallCnt
         cnt.save()
     
     return redirect('addnote:result', note_id=note_id)
@@ -145,3 +124,36 @@ def delete_note(request, note_id):
     note = get_object_or_404(Note, pk=note_id)
     note.delete()
     return redirect('mynote:index')
+
+def callEtriApi(audioFilePath):
+    openApiURL = "http://aiopen.etri.re.kr:8000/WiseASR/Recognition"
+    accessKey = "b1a210f3-f6fd-4fab-8819-0e47149b2a92"
+    languageCode = "korean"
+    strResult = ""
+    
+    file = open(audioFilePath, "rb")
+    audioContents = base64.b64encode(file.read()).decode("utf8")
+    file.close()
+
+    requestJson = {
+        "access_key": accessKey,
+        "argument": {
+            "language_code": languageCode,
+            "audio": audioContents
+        }
+    }
+
+    http = urllib3.PoolManager()
+    response = http.request(
+        "POST",
+        openApiURL,
+        headers={"Content-Type": "application/json; charset=UTF-8"},
+        body=json.dumps(requestJson)
+    )
+    try:
+        jsonObject = json.loads(str(response.data,"utf-8"))
+        strResult = str(jsonObject.get("return_object").get("recognized"))
+    except:
+        pass
+
+    return strResult
