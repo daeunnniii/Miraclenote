@@ -93,6 +93,15 @@
         nav.classList.add('active');
     }
     function setThumbnail(event) {
+        var fileName = document.getElementById('audio').files[0].name;
+        fileName = fileName.slice(fileName.indexOf(".") + 1).toLowerCase();
+
+        if(fileName != "wav"){
+            alert("wav 파일만 등록 가능합니다.");
+            $("#audio").val("");
+            return;
+        }
+
         document.getElementById('file_route').value=document.getElementById('audio').files[0].name;
     }
     function doFunction(){
