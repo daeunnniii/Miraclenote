@@ -16,7 +16,8 @@ def index(request):
     noteCntChk = NoteCnt.objects.filter(input_date=today)
     
     if noteCntChk :
-        print("test")
+        #print("test")
+        pass
     else :
         cnt = NoteCnt()
         cnt.input_date = today
@@ -25,7 +26,7 @@ def index(request):
 
     noteCnt = NoteCnt.objects.get(input_date = today)
     noteCntPer = noteCnt.save_cnt/1000*100
-    print(noteCntPer)
+    #print(noteCntPer)
     
     context = {'note_list':note_list, 'user':user, 'noteCntPer':noteCntPer, 'noteCnt':noteCnt.save_cnt}
     return render(request, 'mynote/fullnote.html', context)

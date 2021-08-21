@@ -327,7 +327,7 @@ def textrank_w2v_to_vis(texts):
     for word, rank in keywords:
         if word.index('/') > 1:
             keyword_list.append(word)
-    print(keyword_list)
+    #print(keyword_list)
     ##word2vec##
     warnings.filterwarnings(action='ignore', category=UserWarning, module='gensim')
     model = Word2Vec.load('static/kowiki.bin')
