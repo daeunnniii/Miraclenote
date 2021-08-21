@@ -94,6 +94,16 @@
     }
     function setThumbnail(event) {
         var fileName = document.getElementById('audio').files[0].name;
+
+        var pattern_spc = /[~!@#$%^&*()_+|<>?:;={}]/;
+
+        if( pattern_spc.test(fileName)) {
+
+            alert("file 명에 특수문자 입력은 불가능합니다.");
+            $("#audio").val("");
+            return;
+        }
+
         fileName = fileName.slice(fileName.indexOf(".") + 1).toLowerCase();
 
         if(fileName != "wav"){
