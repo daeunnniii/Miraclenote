@@ -36,7 +36,7 @@ def saveNote(request):
     
     if noteCnt:
         totalCnt = NoteCnt.objects.get(input_date = today).save_cnt
-        if totalCnt < 1000 :
+        if totalCnt > 1000 :
             messages.error(request, "일일 API 사용량이 초과하여 노트 등록이 불가능합니다.")
             return redirect('mynote:index')
     
