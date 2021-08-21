@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.utils.dateformat import DateFormat
-
+from django.http import Http404
 from .models import Note
 from .models import NoteCnt
 from .forms import NoteEditForm
@@ -103,9 +103,13 @@ def saveNote(request):
 @login_required(login_url='common:login')
 def result(request, note_id):
     note = get_object_or_404(Note, pk=note_id)
-    form = NoteEditForm(instance=note)
-    context = {'note' : note, 'form' : form}
-    return render(request, 'addnote/mynote_detail.html', context)
+    if request.user.id != note.user_id:
+        raise Http404("Note does not exist.")
+    else:
+        form = NoteEditForm(instance=note)
+        context = {'note' : note, 'form' : form}
+        return render(request, 'addnote/mynote_detail.html', context)
+
 
 @login_required(login_url='common:login')
 def view_network(request, note_id):
